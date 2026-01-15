@@ -20,6 +20,13 @@ export default function VenuesPage() {
   const [selectedCapacity, setSelectedCapacity] = useState('all');
 
   const [chatOpen, setChatOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogout = () => {
+    sessionStorage.clear();
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
  
 
 
@@ -111,24 +118,29 @@ const fetchFilteredVenues = async (filters) => {
   ];
 
   const filteredVenues = venues.filter(v => {
-    const matchSearch =
-      v.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      v.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      v.hall_type?.toLowerCase().includes(searchTerm.toLowerCase());
+    const q = (searchTerm || '').trim().toLowerCase();
+    const totalCapacity = (Number(v.men_capacity) || 0) + (Number(v.women_capacity) || 0);
+    const city = v.location || v.owners?.users?.city || '';
+    const name = v.name || '';
+    const type = v.hall_type || '';
+    const ownerDesc = v.owners?.description || '';
 
-    const matchLocation = selectedLocation === 'all' || v.location === selectedLocation;
+    const matchSearch = !q || [name, city, type, ownerDesc].some(field => field.toLowerCase().includes(q));
 
+    const matchLocation = selectedLocation === 'all' || city === selectedLocation;
+
+    const price = Number(v.price) || 0;
     const matchPrice =
       selectedPrice === 'all' ||
-      (selectedPrice === 'low' && v.price < 7000) ||
-      (selectedPrice === 'medium' && v.price >= 7000 && v.price <= 9000) ||
-      (selectedPrice === 'high' && v.price > 9000);
+      (selectedPrice === 'low' && price < 7000) ||
+      (selectedPrice === 'medium' && price >= 7000 && price <= 9000) ||
+      (selectedPrice === 'high' && price > 9000);
 
     const matchCapacity =
       selectedCapacity === 'all' ||
-      (selectedCapacity === 'small' && v.capacity < 250) ||
-      (selectedCapacity === 'medium' && v.capacity >= 250 && v.capacity <= 350) ||
-      (selectedCapacity === 'large' && v.capacity > 350);
+      (selectedCapacity === 'small' && totalCapacity < 250) ||
+      (selectedCapacity === 'medium' && totalCapacity >= 250 && totalCapacity <= 350) ||
+      (selectedCapacity === 'large' && totalCapacity > 350);
 
     return matchSearch && matchLocation && matchPrice && matchCapacity;
   });
@@ -137,6 +149,8 @@ const fetchFilteredVenues = async (filters) => {
 
   /* ================= FONT & NAVBAR SCROLL ================= */
   useEffect(() => {
+    setIsLoggedIn(!!sessionStorage.getItem("currentEmail"));
+    
     const link = document.createElement('link');
     link.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;600&display=swap';
     link.rel = 'stylesheet';
@@ -162,33 +176,62 @@ const fetchFilteredVenues = async (filters) => {
     <div>
 
       {/* ================= NAVBAR ================= */}
-      <nav className="navbar navbar-expand-lg navbar-light wps-navbar">
+      <nav className="navbar navbar-expand-lg navbar-light wps-navbar fixed-top">
         <div className="container">
           <Link className="navbar-brand d-flex align-items-center" to="/">
             <motion.div
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
-              transition={{ duration: 0.8 }}
-              className="logo-box"
+              transition={{ duration: 0.8, type: "spring" }}
+              style={{
+                width: '50px',
+                height: '50px',
+                background: 'linear-gradient(135deg, #D4AF37 0%, #8B7355 100%)',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: '12px',
+                color: '#ffffff',
+                fontWeight: 'bold',
+                fontSize: '1.2rem',
+                boxShadow: '0 8px 20px rgba(212, 175, 55, 0.3)'
+              }}
             >
               WPS
             </motion.div>
             <span className="brand-primary">Wedding Planning System</span>
           </Link>
 
-          <button className="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu">
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span className="navbar-toggler-icon"></span>
           </button>
 
           <div className="collapse navbar-collapse" id="navMenu">
-            <ul className="navbar-nav ms-auto">
+            <ul className="navbar-nav ms-auto align-items-lg-center">
               <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
               <li className="nav-item"><Link className="nav-link active" to="/VenuesPage">Venues</Link></li>
               <li className="nav-item"><Link className="nav-link" to="/DecorPage">Decoration</Link></li>
               <li className="nav-item"><Link className="nav-link" to="/DJ">DJ</Link></li>
               <li className="nav-item"><Link className="nav-link" to="/CakePage">Cakes</Link></li>
               <li className="nav-item"><Link className="nav-link" to="/PhotographersPage">Photography</Link></li>
-              <li className="nav-item ms-3"><Link className="btn btn-primary-custom" to="/login">Log in</Link></li>
+              
+              {/* زر Login / Logout */}
+              <li className="nav-item">
+                <button
+                  className="btn btn-primary-custom"
+                  onClick={isLoggedIn ? handleLogout : () => navigate("/login")}
+                  style={{
+                    color: '#000',
+                    fontWeight: '800',
+                    fontSize: '1rem',
+                    textShadow: '0 2px 4px rgba(255,255,255,0.5)',
+                    letterSpacing: '0.5px'
+                  }}
+                >
+                  {isLoggedIn ? "Logout" : "Log in"}
+                </button>
+              </li>
             </ul>
           </div>
         </div>
@@ -246,42 +289,56 @@ const fetchFilteredVenues = async (filters) => {
         transition={{ delay: i * 0.1 }}
       >
         <div className="venue-card">
-        <img
-  src={v.imgurl ? `/img/hall/${v.imgurl.split(",")[0].trim()}` : "/images/Venue.jpg"}
-  alt={v.hall_type}
-  className="venue-image"
-/>
-
-<div className="venue-ratings">
-  ⭐ {v.owners?.rate ?? 0}/5
-  <span className="rating-count">
-    ({v.owners?.rating_count ?? 0})
-  </span>
-</div>
-
-          <h3>{v.hall_type}</h3>
-
-          <p>{v.owners?.description}</p>
-
-          <div className="venue-details">
-            <p>📍 {v.owners?.users?.city}</p>
-            <p>👥 {v.men_capacity + v.women_capacity} guests</p>
-            {v.hall_type && <p>🏛️ {v.hall_type}</p>}
-            {v.parking && <p>🅿️ Parking Available</p>}
-            {v.rate && <p>⭐ {v.rate}/5</p>}
+          <div className="venue-image-wrapper">
+            <img
+              src={v.imgurl ? `/img/hall/${v.imgurl.split(",")[0].trim()}` : "/images/Venue.jpg"}
+              alt={v.hall_type}
+              className="venue-image"
+            />
           </div>
 
-          <div className="venue-price">
-            {v.price?.toLocaleString()} ₪
+          <div className="venue-content">
+            <h3 className="venue-name">{v.hall_type}</h3>
+
+            <div className="venue-rating">
+              <span className="rating-stars">⭐</span>
+              <span className="rating-number">{(v.owners?.rate ?? 0).toFixed(1)}/5</span>
+              <span className="rating-reviews">({v.owners?.rating_count ?? 0} reviews)</span>
+            </div>
+
+            <p className="venue-description">{v.owners?.description}</p>
+
+            <div className="venue-details">
+              <div className="venue-detail-item">
+                <div className="detail-icon">📍</div>
+                <div className="detail-label">Location</div>
+                <div className="detail-value">{v.owners?.users?.city}</div>
+              </div>
+              <div className="venue-detail-item">
+                <div className="detail-icon">👥</div>
+                <div className="detail-label">Capacity</div>
+                <div className="detail-value">{v.men_capacity + v.women_capacity}</div>
+              </div>
+              {v.parking && (
+                <div className="venue-detail-item">
+                  <div className="detail-icon">🅿️</div>
+                  <div className="detail-label">Parking</div>
+                  <div className="detail-value">Available</div>
+                </div>
+              )}
+            </div>
+
+            <div className="venue-price">
+              {v.price?.toLocaleString()} ₪
+            </div>
+
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate(`/venue/${v.owner_id}`)}
+            >
+              see more
+            </button>
           </div>
-
-    <button
-  className="btn-book"
-  onClick={() => navigate(`/venue/${v.owner_id}`)}
->
-  see more
-</button>
-
         </div>
       </motion.div>
     ))}

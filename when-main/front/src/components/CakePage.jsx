@@ -32,7 +32,7 @@ useEffect(() => {
 
     const { data: owners, error: ownersError } = await supabase
       .from("owners")
-      .select("owner_id, user_id")
+      .select("owner_id, user_id, rate, rating_count, description")
       .eq("owner_type", "cake")
       .eq("accept", true)
       .eq("visible", true);
@@ -68,8 +68,11 @@ useEffect(() => {
         owner_id: owner?.owner_id,        
         owner_user_id: cake.user_id,
         name: cake.users?.name,
-     image: `/img/cake/${cake.imgurl}`,
-        location: cake.users?.city
+        image: `/img/cake/${cake.imgurl}`,
+        location: cake.users?.city,
+        rate: owner?.rate || 0,
+        rating_count: owner?.rating_count || 0,
+        description: owner?.description || ""
       };
     });
 
@@ -252,14 +255,32 @@ const handleConfirmVisit = async () => {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <div className="container">
-              <div className="search-box">
-                
-              </div>
-
-              <div className="row justify-content-center">
-                <div className="col-md-6">
+              <div className="row gap-3 align-items-end justify-content-center">
+                {/* Search by Name */}
+                <div className="col-md-5">
                   <div className="filter-group">
-                    <label className="filter-label">Location</label>
+                    <label className="filter-label">🔍 Search by Shop Name</label>
+                    <input
+                      type="text"
+                      className="filter-select"
+                      placeholder="e.g., Alzafaf cakes..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      style={{
+                        padding: '10px 15px',
+                        border: '1px solid #d4a574',
+                        borderRadius: '8px',
+                        fontSize: '14px',
+                        width: '100%'
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Filter by Location */}
+                <div className="col-md-5">
+                  <div className="filter-group">
+                    <label className="filter-label">📍 Filter by Location</label>
                     <select
                       className="filter-select"
                       value={selectedLocation}
@@ -297,21 +318,23 @@ const handleConfirmVisit = async () => {
                     <div className="cake-content">
                       <h3 className="cake-name">{shop.name}</h3>
 
-                      <div className="cake-location">
-                        <span className="location-icon">📍</span>
-                        <span>{shop.location}</span>
+                      <div className="cake-details">
+                        <div className="cake-detail-item">
+                          <div className="cake-detail-icon">📍</div>
+                          <div className="cake-detail-label">Location</div>
+                          <div className="cake-detail-value">{shop.location}</div>
+                        </div>
                       </div>
-<button
-  className="btn btn-primary"
-  onClick={() => {
-    setSelectedCake(shop);
-    setShowVisitForm(true);
-  }}
->
-  Visit now
-</button>
 
-
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          setSelectedCake(shop);
+                          setShowVisitForm(true);
+                        }}
+                      >
+                        Visit now
+                      </button>
                     </div>
                   </div>
                 </motion.div>

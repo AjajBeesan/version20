@@ -1,53 +1,151 @@
-/* src/style/SeeBookingDetails.css */
-.owner-details-page {
-  padding: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Lato:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #8B7355;
+  --gold: #D4AF37;
+  --rose-gold: #B76E79;
+  --light: #FAF8F5;
+  --dark: #2C2416;
+  --cream: #FFF9F0;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 30px rgba(0,0,0,0.08);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* === NAVBAR === */
 .navbar {
+  background: linear-gradient(90deg, rgba(255,255,255,0.97) 0%, rgba(255,249,240,0.97) 100%);
+  backdrop-filter: blur(30px) saturate(200%);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+  border-bottom: 2px solid rgba(212,175,55,0.2);
+  padding: 0.8rem 2rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
-  margin-bottom: 30px;
-  border-bottom: 2px solid #007bff;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 2rem;
 }
 
-.navbar-left {
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent);
+}
+
+.navbar::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.navbar:hover::after {
+  opacity: 1;
+}
+
+.navbar-logo {
   display: flex;
-  gap: 15px;
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--dark);
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  margin-right: auto;
 }
 
-.navbar-left button,
-.navbar-right .logout-btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
+.logo-text {
+  background: linear-gradient(135deg, var(--dark) 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.navbar button {
+  background: transparent;
+  border: 2px solid rgba(212,175,55,0.3);
+  color: var(--dark);
+  font-weight: 600;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.3s;
-  background: #f8f9fa;
-  color: #333;
-  border: 1px solid #dee2e6;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
 }
 
-.navbar-left button:hover {
-  background: #007bff;
-  color: white;
-  border-color: #007bff;
+.navbar button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent);
+  transition: left 0.4s ease;
+}
+
+.navbar button:hover {
+  border-color: var(--gold);
+  background: rgba(212,175,55,0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212,175,55,0.2);
 }
 
 .logout-btn {
-  background: #dc3545 !important;
-  color: white !important;
-  border-color: #dc3545 !important;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  border: none;
+  color: white;
+  box-shadow: 0 4px 15px rgba(231,76,60,0.3);
 }
 
 .logout-btn:hover {
-  background: #c82333 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(231,76,60,0.4);
+}
+
+.owner-details-page {
+  padding-top: 100px;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #FAF8F5 0%, #FFF9F0 50%, #FAF8F5 100%);
+  padding-bottom: 4rem;
 }
 
 /* === MAIN CONTAINER === */

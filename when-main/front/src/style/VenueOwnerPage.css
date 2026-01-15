@@ -44,11 +44,11 @@
 
 /* ========== NAVBAR ========== */
 .navbar {
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(30px) saturate(180%);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-  border-bottom: 1px solid rgba(212,175,55,0.15);
-  padding: 1rem 2rem;
+  background: linear-gradient(90deg, rgba(255,255,255,0.97) 0%, rgba(255,249,240,0.97) 100%);
+  backdrop-filter: blur(30px) saturate(200%);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+  border-bottom: 2px solid rgba(212,175,55,0.2);
+  padding: 0.8rem 2rem;
   position: fixed;
   top: 0;
   left: 0;
@@ -58,6 +58,17 @@
   justify-content: space-between;
   align-items: center;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 2rem;
+}
+
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent);
 }
 
 .navbar::after {
@@ -78,29 +89,65 @@
 
 .navbar-left {
   display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
   align-items: center;
+  flex-shrink: 0;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--dark);
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  margin-right: auto;
+}
+
+.logo-icon {
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+}
+
+.logo-text {
+  background: linear-gradient(135deg, var(--dark) 0%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.navbar-logo:hover {
+  transform: translateY(-2px);
 }
 
 .navbar-right {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex: 1;
 }
 
 .navbar button {
   background: transparent;
-  border: 2px solid transparent;
-  color: #3D3427;
+  border: 2px solid rgba(212,175,55,0.3);
+  color: var(--dark);
   font-weight: 600;
-  padding: 0.6rem 1.3rem;
+  padding: 0.5rem 1.2rem;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   white-space: nowrap;
   position: relative;
   overflow: hidden;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
 }
 
 .navbar button::before {
@@ -111,40 +158,52 @@
   width: 0;
   height: 0;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--cream) 0%, white 100%);
+  background: linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0.08) 100%);
   transform: translate(-50%, -50%);
-  transition: width 0.4s ease, height 0.4s ease;
-  z-index: -1;
+  transition: width 0.5s ease, height 0.5s ease;
+  z-index: 0;
 }
 
 .navbar button:hover::before {
-  width: 200%;
-  height: 200%;
+  width: 300%;
+  height: 300%;
 }
 
 .navbar button:hover {
   border-color: var(--gold);
   color: var(--gold);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(212,175,55,0.2);
+  box-shadow: 0 6px 20px rgba(212,175,55,0.25);
+}
+
+.navbar button:active {
+  transform: translateY(0);
 }
 
 .logout-btn {
   background: linear-gradient(135deg, var(--gold) 0%, var(--primary) 100%) !important;
   color: white !important;
   border: none !important;
-  box-shadow: 0 4px 20px rgba(212,175,55,0.35);
+  box-shadow: 0 6px 25px rgba(212,175,55,0.4);
+  font-weight: 700;
+  padding: 0.8rem 2rem !important;
   position: relative;
   overflow: hidden;
 }
 
 .logout-btn::before {
   background: linear-gradient(135deg, var(--primary) 0%, var(--gold) 100%) !important;
+  opacity: 0;
+  transition: opacity 0.4s ease !important;
+}
+
+.logout-btn:hover::before {
+  opacity: 1 !important;
 }
 
 .logout-btn:hover {
   transform: translateY(-3px) !important;
-  box-shadow: 0 8px 30px rgba(212,175,55,0.45) !important;
+  box-shadow: 0 10px 35px rgba(212,175,55,0.5) !important;
 }
 
 /* ========== PAGE HEADER ========== */
@@ -159,7 +218,7 @@
   text-align: center;
   margin: 100px auto 2.5rem;
   position: relative;
-  padding-bottom: 1rem;
+  padding-bottom: 0rem;
   letter-spacing: 0.5px;
   z-index: 1;
 }

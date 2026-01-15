@@ -254,14 +254,15 @@ const cancelEdit = () => {
 
       {/* === NAVBAR === */}
       <nav className="navbar">
-        <div className="navbar-left">
-          <button onClick={() => navigate("/VenueOwnerPage", { state: { userId } })}>Profile</button>
-          <button onClick={() => navigate("/visit-form", { state: { userId } })}>Visit Form</button>
-          <button onClick={() => navigate("/OwnerSearchBookings")}>Search</button>
-          <button>Add Booking</button>
-          <button onClick={() => navigate("/SeeBookingDetailsHall", { state: { userId } })}>Manage Bookings</button>
+        <div className="navbar-logo">
+          <span className="logo-text">Wedding Planing System</span>
         </div>
         <div className="navbar-right">
+          <button onClick={() => navigate("/VenueOwnerPage", { state: { userId } })}>👤 Profile</button>
+          <button onClick={() => navigate("/VisitFormHall", { state: { userId } })}>📋 Visit Form</button>
+          <button onClick={() => navigate(`/OwnerSearchBookings`)}>🔍 Search</button>
+          <button>➕ Add Booking</button>
+          <button onClick={() => navigate("/SeeBookingDetailsHall", { state: { userId } })}>📊 Manage Bookings</button>
           <button className="logout-btn" onClick={handleLogout}>Logout</button>
         </div>
       </nav>

@@ -240,7 +240,7 @@ export default function ReservationsTable() {
 
   // ====================== DELETE FUNCTIONS ======================
   const handleDelete = async (type, id) => {
-    if (!window.confirm("Are you sure you want to delete this booking?")) return;
+    if (!window.confirm("Are you sure you want to cancellation of reservation?")) return;
 
     try {
       if (type === "reservation") {
@@ -284,14 +284,15 @@ export default function ReservationsTable() {
     <div className="owner-details-page">
       {/* === NAVBAR === */}
       <nav className="navbar">
-        <div className="navbar-left">
-          <button onClick={() => navigate("/VenueOwnerPage", { state: { userId } })}>Profile</button>
-          <button onClick={() => navigate("/visit-form", { state: { userId } })}>Visit Form</button>
-          <button onClick={() => navigate("/search")}>Search</button>
-          <button onClick={() => navigate("/add-booking", { state: { userId } })}>Add Booking</button>
-          <button onClick={() => navigate("/booking-details", { state: { userId } })}>See Booking Details</button>
+        <div className="navbar-logo">
+          <span className="logo-text">Wedding Planing System</span>
         </div>
         <div className="navbar-right">
+          <button onClick={() => navigate("/VenueOwnerPage", { state: { userId } })}>👤 Profile</button>
+          <button onClick={() => navigate("/VisitFormHall", { state: { userId } })}>📋 Visit Form</button>
+          <button>🔍 Search</button>
+          <button onClick={() => navigate("/AddBookingByOwnerHall", { state: { userId } })}>➕ Add Booking</button>
+          <button onClick={() => navigate("/SeeBookingDetailsHall", { state: { userId } })}>📊 See Booking Details</button>
           <button className="logout-btn" onClick={handleLogout}>Logout</button>
         </div>
       </nav>

@@ -38,6 +38,7 @@ export default function VenueOwnerPage() {
           description: data.description,
           rate: data.rate,
           name: data.users?.name || "",
+          email: data.users?.email || "",
           phone: data.users?.phone || "",
           city: data.users?.city || ""
         });
@@ -85,6 +86,7 @@ export default function VenueOwnerPage() {
 
     await supabase.from("users").update({
       name: formData.name,
+      email: formData.email,
       phone: formData.phone,
       city: formData.city
     }).eq("id", ownerData.user_id);
@@ -143,21 +145,14 @@ const formatHallName = (name) =>
 
       {/* === NAVBAR === */}
       <nav className="navbar">
-        <div className="navbar-left">
-          <button onClick={() => setEditMode(false)}>Profile</button>
-          <button onClick={() => navigate("/VisitFormHall", { state: { userId } })}>Visit Form</button>
-<button
-  onClick={() =>
-    navigate(`/OwnerSearchBookings/${ownerData.owner_id}`)
-  }
->
-  Search
-</button>
-
-          <button onClick={() => navigate("/AddBookingByOwnerHall", { state: { userId } })}>Add Booking</button>
-          <button onClick={() => navigate("/booking-details", { state: { userId } })}>See Booking Details</button>
+        <div className="navbar-logo">
+          <span className="logo-text">Wedding Planing System</span>
         </div>
         <div className="navbar-right">
+          <button onClick={() => setEditMode(true)}>👤 Profile</button>
+          <button onClick={() => navigate("/VisitFormHall", { state: { userId } })}>📋 Visit Form</button>
+          <button onClick={() => navigate(`/OwnerSearchBookings/${ownerData.owner_id}`)}>🔍 Search</button>
+          <button onClick={() => navigate("/AddBookingByOwnerHall", { state: { userId } })}>➕ Add Booking</button>
           <button className="logout-btn" onClick={handleLogout}>Logout</button>
         </div>
       </nav>
@@ -186,7 +181,8 @@ const formatHallName = (name) =>
               name="rate" 
               type="number" 
               value={formData.rate} 
-              disabled 
+              onChange={handleChange}
+              disabled={!editMode} 
             />
           </label>
 
@@ -203,8 +199,10 @@ const formatHallName = (name) =>
           <label>
             <span>Email</span>
             <input 
-              value={ownerData.users?.email} 
-              disabled 
+              name="email"
+              value={formData.email} 
+              onChange={handleChange}
+              disabled={!editMode} 
             />
           </label>
 

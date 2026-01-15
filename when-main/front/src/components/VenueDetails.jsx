@@ -1,22 +1,26 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { motion } from 'framer-motion';
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../style/VenueDetails.css";
+import "../style/VenuesPage.css";
 
 export default function VenueDetails() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { userId } = useParams();
   const [commentsList, setCommentsList] = useState([]);
   const [hall, setHall] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [bookingDate, setBookingDate] = useState(null);
   const [date, setDate] = useState(new Date());
   const [bookedDates, setBookedDates] = useState([]); 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [userIdDb, setUserIdDb] = sessionStorage.getItem("userId_") || null;
+  const [userIdDb, setUserIdDb] = useState(sessionStorage.getItem("userId_") || null);
   const [message, setMessage] = useState("");
   const [comment, setComment] = useState("");
   const [commentMsg, setCommentMsg] = useState("");
@@ -25,6 +29,14 @@ const [showVisitForm, setShowVisitForm] = useState(false);
 const [visitDate, setVisitDate] = useState(null);
 const [visitTime, setVisitTime] = useState("");
 const [visitMessage, setVisitMessage] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    sessionStorage.clear();
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
 
   function StarRating({ ownerId }) {
     const [rating, setRating] = useState(0);
@@ -172,6 +184,28 @@ const handleVisitSubmit = async (e) => {
     fetchHall();
   }, [userId]);
 
+  useEffect(() => {
+    setIsLoggedIn(!!sessionStorage.getItem("currentEmail"));
+    
+    const link = document.createElement('link');
+    link.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;600&display=swap';
+    link.rel = 'stylesheet';
+    if (!document.head.querySelector('link[href*="Playfair"]')) {
+      document.head.appendChild(link);
+    }
+
+    const handleScroll = () => {
+      const navbar = document.querySelector('.wps-navbar');
+      if (navbar) {
+        window.scrollY > 50
+          ? navbar.classList.add('navbar-scrolled')
+          : navbar.classList.remove('navbar-scrolled');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   const handleAddComment = async () => {
     const userIdFromSession = sessionStorage.getItem("userId_");
 
@@ -237,31 +271,30 @@ const handleVisitSubmit = async (e) => {
   useEffect(() => {
     fetchComments();
   }, [userId]);
-// دالة لتحميل بيانات المستخدم
-const fetchUserDataFromSession = async () => {
-  const userIdFromSession = sessionStorage.getItem("userId_");
-  if (!userIdFromSession) return;
 
-  const { data, error } = await supabase
-    .from("users")
-    .select("id, name, email, phone")
-    .eq("id", userIdFromSession)
-    .single();
+  const fetchUserDataFromSession = async () => {
+    const userIdFromSession = sessionStorage.getItem("userId_");
+    if (!userIdFromSession) return;
 
-  if (!error && data) {
-    setUserIdDb(data.id);
-    setName(data.name);
-    setEmail(data.email);
-    setPhone(data.phone);
-  }
-};
+    const { data, error } = await supabase
+      .from("users")
+      .select("id, name, email, phone")
+      .eq("id", userIdFromSession)
+      .single();
 
-// نستخدم useEffect لمراقبة showBookingForm
-useEffect(() => {
-  if (showBookingForm) {
-    fetchUserDataFromSession();
-  }
-}, [showBookingForm]);
+    if (!error && data) {
+      setUserIdDb(data.id);
+      setName(data.name);
+      setEmail(data.email);
+      setPhone(data.phone);
+    }
+  };
+
+  useEffect(() => {
+    if (showBookingForm) {
+      fetchUserDataFromSession();
+    }
+  }, [showBookingForm]);
 
   useEffect(() => {
     const fetchBookedDates = async () => {
@@ -280,8 +313,6 @@ useEffect(() => {
 
     fetchBookedDates();
   }, [hall]);
-
-  if (!hall) return <p>Loading...</p>;
 
   const handleBooking = async (e) => {
     e.preventDefault();
@@ -331,8 +362,94 @@ useEffect(() => {
     }
   };
 
+  useEffect(() => {
+    setIsLoggedIn(!!sessionStorage.getItem("currentEmail"));
+    
+    const link = document.createElement('link');
+    link.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;600&display=swap';
+    link.rel = 'stylesheet';
+    if (!document.head.querySelector('link[href*="Playfair"]')) {
+      document.head.appendChild(link);
+    }
+
+    const handleScroll = () => {
+      const navbar = document.querySelector('.wps-navbar');
+      if (navbar) {
+        window.scrollY > 50
+          ? navbar.classList.add('navbar-scrolled')
+          : navbar.classList.remove('navbar-scrolled');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  if (!hall) return <p>Loading...</p>;
+
   return (
-    <div className="venue-container">
+    <div>
+      {/* NAVBAR */}
+      <nav className="navbar navbar-expand-lg navbar-light wps-navbar fixed-top">
+        <div className="container">
+          <Link className="navbar-brand d-flex align-items-center" to="/">
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ duration: 0.8, type: "spring" }}
+              style={{
+                width: '50px',
+                height: '50px',
+                background: 'linear-gradient(135deg, #D4AF37 0%, #8B7355 100%)',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: '12px',
+                color: '#ffffff',
+                fontWeight: 'bold',
+                fontSize: '1.2rem',
+                boxShadow: '0 8px 20px rgba(212, 175, 55, 0.3)'
+              }}
+            >
+              WPS
+            </motion.div>
+            <span className="brand-primary">Wedding Planning System</span>
+          </Link>
+
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+          <div className="collapse navbar-collapse" id="navMenu">
+            <ul className="navbar-nav ms-auto align-items-lg-center">
+              <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
+              <li className="nav-item"><Link className="nav-link" to="/VenuesPage">Venues</Link></li>
+              <li className="nav-item"><Link className="nav-link" to="/DecorPage">Decoration</Link></li>
+              <li className="nav-item"><Link className="nav-link" to="/DJ">DJ</Link></li>
+              <li className="nav-item"><Link className="nav-link" to="/CakePage">Cakes</Link></li>
+              <li className="nav-item"><Link className="nav-link" to="/PhotographersPage">Photography</Link></li>
+              <li className="nav-item">
+                <button
+                  className="btn btn-primary-custom"
+                  onClick={isLoggedIn ? handleLogout : () => navigate("/login")}
+                  style={{
+                    color: '#000',
+                    fontWeight: '800',
+                    fontSize: '1rem',
+                    textShadow: '0 2px 4px rgba(255,255,255,0.5)',
+                    letterSpacing: '0.5px'
+                  }}
+                >
+                  {isLoggedIn ? "Logout" : "Log in"}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div className="venue-container">
       {/* IMAGE AND DETAILS SECTION */}
       <div className="venue-header">
         <div className="venue-image-section">
@@ -597,6 +714,7 @@ useEffect(() => {
   </div>
 )}
 
+      </div>
     </div>
   );
 }

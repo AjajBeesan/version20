@@ -192,7 +192,6 @@ body {
   font-family: 'Lato', sans-serif;
   font-size: 1rem;
 }
-
 .filter-select {
   width: 100%;
   padding: 0.9rem 1.2rem;
@@ -204,31 +203,29 @@ body {
   font-family: 'Lato', sans-serif;
   cursor: pointer;
 }
-
 .filter-select:focus {
   outline: none;
   border-color: var(--gold);
   box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
 }
-
 /* Cake Shop Cards */
 .cakes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2.5rem;
-  padding: 2rem 0;
+  gap: 2rem;
+  padding: 0rem 0;
 }
-
 .cake-card {
   background: var(--white);
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 2px solid transparent;
+  border: 5px solid transparent;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
-
 .cake-card::before {
   content: '';
   position: absolute;
@@ -242,20 +239,20 @@ body {
   transition: opacity 0.5s ease;
   z-index: -1;
 }
-
 .cake-card:hover::before {
   opacity: 1;
 }
-
 .cake-card:hover {
   transform: translateY(-15px);
   box-shadow: 0 25px 60px rgba(212, 175, 55, 0.25);
 }
-
 .cake-image-wrapper {
   position: relative;
-  height: 350px;
+  height: 280px;
   overflow: hidden;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0;
 }
 
 .cake-image {
@@ -263,6 +260,9 @@ body {
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s ease;
+  display: block;
+  margin: 0;
+  padding: 0;
 }
 
 .cake-card:hover .cake-image {
@@ -270,16 +270,59 @@ body {
 }
 
 .cake-content {
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
 }
 
 .cake-name {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--dark);
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   font-family: 'Playfair Display', serif;
+}
+
+.cake-details {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1.5rem;
+  border-top: 2px solid rgba(212, 175, 55, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.cake-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.cake-detail-icon {
+  font-size: 1.9rem;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.cake-detail-label {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  font-family: 'Lato', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.cake-detail-label::after {
+  content: " • ";
+  margin: 0 0.4rem;
+  color: var(--gold);
+}
+
+.cake-detail-value {
+  font-weight: 900;
+  color: var(--dark);
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
 }
 
 .cake-location {

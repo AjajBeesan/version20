@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;500;600;700&display=swap');
+
 :root{ 
   --primary: #8B7355;
   --secondary: #C9A882;
@@ -211,14 +213,13 @@ body {
   box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
 }
 
-/* Venue Cards */
+/* Venue Cards - Matching DJ Page Style */
 .venues-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 2.5rem;
-  padding: 2rem 0;
+  padding: 2.1rem 0;
 }
-
 .venue-card {
   background: var(--white);
   border-radius: 20px;
@@ -232,10 +233,10 @@ body {
 .venue-card::before {
   content: '';
   position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
   background: linear-gradient(135deg, var(--gold) 0%, var(--primary) 100%);
   border-radius: 20px;
   opacity: 0;
@@ -248,13 +249,15 @@ body {
 }
 
 .venue-card:hover {
-  transform: translateY(-15px);
-  box-shadow: 0 25px 60px rgba(212, 175, 55, 0.25);
+  transform: none;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
+/* IMAGE */
 .venue-image-wrapper {
   position: relative;
-  height: 280px;
+  width: 100%;
+  aspect-ratio: 12/7;
   overflow: hidden;
 }
 
@@ -266,110 +269,127 @@ body {
 }
 
 .venue-card:hover .venue-image {
-  transform: scale(1.1);
+  transform: scale(1.3);
 }
 
-.venue-badge {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: linear-gradient(135deg, var(--gold) 0%, var(--primary) 100%);
-  color: var(--white);
-  padding: 0.5rem 1.2rem;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-  font-family: 'Lato', sans-serif;
-}
-
+/* CONTENT */
 .venue-content {
-  padding: 2rem;
+  padding: 1.2rem;
 }
 
 .venue-name {
-  font-size: 1.6rem;
-  font-weight: 700;
+  font-size: 1.35rem;
+  font-weight: 1000;
   color: var(--dark);
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
   font-family: 'Playfair Display', serif;
 }
 
 .venue-rating {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0;
+  margin-bottom: 0.5rem;
+  background: transparent !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .rating-stars {
-  color: var(--gold);
-  font-size: 1.1rem;
+  font-size: 1.3rem;
+  margin-right: 2px;
 }
 
 .rating-number {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--dark);
-  font-family: 'Lato', sans-serif;
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  margin-right: 4px;
 }
 
 .rating-reviews {
   color: var(--text-light);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-family: 'Lato', sans-serif;
 }
 
+/* DESCRIPTION */
 .venue-description {
   color: var(--text);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
   font-family: 'Lato', sans-serif;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+/* DETAILS */
 .venue-details {
   display: flex;
   justify-content: space-between;
-  padding-top: 1.5rem;
-  border-top: 2px solid rgba(212, 175, 55, 0.1);
-  margin-bottom: 1.5rem;
+  padding-top: 0rem;
+  border-top: 0.1px solid rgba(212, 175, 55, 0.1);
+  margin-bottom: 1rem;
+  margin-top: -0.5rem;
 }
 
 .venue-detail-item {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: left;
 }
 
 .detail-icon {
-  font-size: 1.3rem;
+  font-size: 0.5rem;
   color: var(--gold);
-  margin-bottom: 0.3rem;
+  flex-shrink: 0;
 }
 
 .detail-label {
-  font-size: 0.85rem;
+  font-size: 0.4rem;
   color: var(--text-light);
   font-family: 'Lato', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.detail-label::after {
+  content: " • ";
+  margin: 0 0.4rem;
+  color: var(--gold);
 }
 
 .detail-value {
-  font-weight: 600;
+  font-weight: 40;
   color: var(--dark);
   font-family: 'Lato', sans-serif;
+  font-size: 0.55rem;
 }
 
+/* PRICE */
 .venue-price {
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   font-weight: 700;
   background: linear-gradient(135deg, var(--gold) 0%, var(--primary) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 1rem;
+  margin-bottom: 0rem;
   font-family: 'Playfair Display', serif;
 }
 
+/* BUTTON */
 .btn-book {
   width: 100%;
-  padding: 1rem;
+  padding: 0.75rem;
   background: linear-gradient(135deg, var(--gold) 0%, var(--primary) 100%);
   border: none;
   color: var(--white);
@@ -379,6 +399,7 @@ body {
   font-family: 'Lato', sans-serif;
   letter-spacing: 0.5px;
   box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+  cursor: pointer;
 }
 
 .btn-book:hover {
@@ -386,6 +407,7 @@ body {
   box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
   background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
 }
+
 
 /* Chatbot */
 .chatbot-container {
